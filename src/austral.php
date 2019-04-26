@@ -364,6 +364,7 @@ function personasUnidad ($id_unidad){
 });*/
 
 
+
 // Api utilizada por la app
 // Get All Entidades
 // http://localhost/tesis/austral_api/public/index.php/api/entidades
