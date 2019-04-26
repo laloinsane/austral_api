@@ -589,7 +589,6 @@ function conexionEntidadCamino ($id_entidad){
 }*/
 
 /*function conexionCaminoCamino ($id_camino){
-
     //Conexiones camino
     $sql_conexion_camino = "SELECT * FROM CONEXION_CAMINO WHERE ID_CAMINO = ".$id_camino;
 
