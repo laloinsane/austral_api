@@ -4,7 +4,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 $app = new \Slim\App;
 
-/** 
+/** test
  * geo.json correspondiente a la base de datos 9
  * http://localhost/tesis/austral_api/public/index.php/api/geo9.json
  */
