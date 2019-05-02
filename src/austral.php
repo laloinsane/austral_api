@@ -8,7 +8,7 @@ $app = new \Slim\App;
  * geo.json correspondiente a la base de datos 9
  * http://localhost/tesis/austral_api/public/index.php/api/geo9.json
  */
-$app->get('/api/geo9.json', function(Request $request, Response $response){
+$app->get('/v1/geo9.json', function(Request $request, Response $response){
     //Campus points
     $sql_campus = "SELECT * FROM CAMPUS ORDER BY ID_CAMPUS ASC";
     //Unidad points
