@@ -40,6 +40,31 @@ $app->get('/v1/unidades', function(Request $request, Response $response){
 });
 
 /**
+ * all campus
+ * http://localhost/tesis/austral_api/public/index.php/v1/campus
+ */
+$app->get('/v1/campus', function(Request $request, Response $response){
+    $sql1 = "SELECT * FROM CAMPUS ORDER BY ID_CAMPUS ASC";
+
+    try{
+        $db = new db();
+        $db = $db->connect();
+
+        $stmt1 = $db->query($sql1);
+        $datos1 = $stmt1->fetchAll(PDO::FETCH_OBJ);
+
+        $db = null;
+
+        $json1 = json_encode($datos1, JSON_UNESCAPED_UNICODE);
+
+		echo $json1;
+
+    } catch(PDOException $e){
+        echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+/**
  * geo.json correspondiente a la base de datos 10
  * http://localhost/tesis/austral_api/public/index.php/v1/geo10.json
  */
