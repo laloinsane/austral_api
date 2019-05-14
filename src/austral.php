@@ -45,6 +45,7 @@ $app->get('/v1/unidades', function(Request $request, Response $response){
  */
 $app->get('/v1/campus', function(Request $request, Response $response){
     $sql1 = "SELECT * FROM CAMPUS ORDER BY ID_CAMPUS ASC";
+    $sql2 = "SELECT count(ID_CAMPUS) AS TOTAL FROM CAMPUS";
 
     try{
         $db = new db();
@@ -53,11 +54,26 @@ $app->get('/v1/campus', function(Request $request, Response $response){
         $stmt1 = $db->query($sql1);
         $datos1 = $stmt1->fetchAll(PDO::FETCH_OBJ);
 
+        $stmt2 = $db->query($sql2);
+        $datos2 = $stmt2->fetchAll(PDO::FETCH_OBJ);
+
         $db = null;
 
-        $json1 = json_encode($datos1, JSON_UNESCAPED_UNICODE);
+        /*$json1 = json_encode($datos1, JSON_UNESCAPED_UNICODE);
+        $json2 = json_encode($datos2, JSON_UNESCAPED_UNICODE);
 
-		echo $json1;
+        $json = '{
+            "total":'.$datos2[0]->TOTAL.',
+            "resultados":'.$json1.
+        '}';
+        
+        echo $json;*/
+
+        //$json1 = json_encode($datos1, JSON_UNESCAPED_UNICODE);
+
+        //echo $json1;
+        
+        $response->getBody()->write(json_encode(array("total" =>$datos2[0]->TOTAL ,"resultados" => $datos1)));
 
     } catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
