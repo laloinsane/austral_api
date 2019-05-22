@@ -77,6 +77,70 @@ $app->get('/v1/campus', function(Request $request, Response $response){
     }
 });
 
+
+
+
+
+/**
+ * all campus
+ * http://localhost/tesis/austral_api/public/index.php/v1/campus
+ */
+$app->get('/v1/campusa', function(Request $request, Response $response){
+    $sql_campus = "SELECT * FROM CAMPUS ORDER BY ID_CAMPUS ASC";
+    $sql_total_campus = "SELECT count(*) AS TOTAL_CAMPUS FROM CAMPUS";
+
+    try{
+        $db = new db();
+        $db = $db->connect();
+
+        $stmt_campus = $db->query($sql_campus);
+        $datos_campus = $stmt_campus->fetchAll(PDO::FETCH_OBJ);
+        $longitud_campus = count($datos_campus);
+
+        $stmt_total_campus = $db->query($sql_total_campus);
+        $datos_total_campus = $stmt_total_campus->fetchAll(PDO::FETCH_OBJ);
+
+        $db = null;
+
+        $campus = array();
+
+        for($i=0; $i<$longitud_campus; $i++) {
+            $object = (object) array("id_campus" => $datos_campus[$i]->ID_CAMPUS, "nombre_campus" => $datos_campus[$i]->NOMBRE_CAMPUS, "direccion_campus" => $datos_campus[$i]->DIRECCION_CAMPUS, "latitud_campus" => $datos_campus[$i]->LATITUD_CAMPUS, "longitud_campus" => $datos_campus[$i]->LONGITUD_CAMPUS);
+            array_push($campus, $object);
+        }
+
+        $json_campus = json_encode($campus, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+
+        /*$json_geo = '{
+            "total_campus": '.$datos_total_campus[0]->TOTAL_CAMPUS.',
+            "campus": [
+                {
+                  "id_campus": 3,
+                  "nombre_campus": "uach",
+                  "direccion_campus": "nose",
+                  "latitud_campus": -41.490345,
+                  "longitud_campus": -72.896154
+                }
+            ]
+        }';*/
+
+        $json_geo = '{
+            "total_campus": '.$datos_total_campus[0]->TOTAL_CAMPUS.',
+            "campus":'.$json_campus.'
+        }';
+        
+        echo $json_geo;
+
+    } catch(PDOException $e){
+        echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+
+
+
+
+
 /**
  * all data campus by id
  * http://localhost/tesis/austral_api/public/index.php/v1/campus/{id}
