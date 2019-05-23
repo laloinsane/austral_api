@@ -14,78 +14,10 @@ $app->add(function ($req, $res, $next) {
 });
 
 /**
- * all unidades
- * http://localhost/tesis/austral_api/public/index.php/v1/unidades
- */
-$app->get('/v1/unidades', function(Request $request, Response $response){
-    $sql1 = "SELECT * FROM UNIDAD ORDER BY ID_UNIDAD ASC";
-
-    try{
-        $db = new db();
-        $db = $db->connect();
-
-        $stmt1 = $db->query($sql1);
-        $datos1 = $stmt1->fetchAll(PDO::FETCH_OBJ);
-
-        $db = null;
-
-        $json1 = json_encode($datos1, JSON_UNESCAPED_UNICODE);
-
-		echo $json1;
-
-    } catch(PDOException $e){
-        echo '{"error": {"text": '.$e->getMessage().'}';
-    }
-});
-
-/**
  * all campus
  * http://localhost/tesis/austral_api/public/index.php/v1/campus
  */
 $app->get('/v1/campus', function(Request $request, Response $response){
-    $sql_campus = "SELECT * FROM CAMPUS ORDER BY ID_CAMPUS ASC";
-    $sql_total_campus = "SELECT count(*) AS TOTAL_CAMPUS FROM CAMPUS";
-
-    try{
-        $db = new db();
-        $db = $db->connect();
-
-        $stmt_campus = $db->query($sql_campus);
-        $datos_campus = $stmt_campus->fetchAll(PDO::FETCH_OBJ);
-        $longitud_campus = count($datos_campus);
-
-        $stmt_total_campus = $db->query($sql_total_campus);
-        $datos_total_campus = $stmt_total_campus->fetchAll(PDO::FETCH_OBJ);
-
-        $db = null;
-        
-        $json = array();
-        $campus = array();
-
-        for($i=0; $i<$longitud_campus; $i++) {
-            $object = (object) array("id_campus" => $datos_campus[$i]->ID_CAMPUS, "nombre_campus" => $datos_campus[$i]->NOMBRE_CAMPUS, "direccion_campus" => $datos_campus[$i]->DIRECCION_CAMPUS, "latitud_campus" => $datos_campus[$i]->LATITUD_CAMPUS, "longitud_campus" => $datos_campus[$i]->LONGITUD_CAMPUS);
-            array_push($campus, $object);
-        }
-
-        $obj = (object) array("total_campus" => $datos_total_campus[0]->TOTAL_CAMPUS, "campus" => $campus);
-        array_push($json, $obj);
-
-        echo json_encode($json, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-
-    } catch(PDOException $e){
-        echo '{"error": {"text": '.$e->getMessage().'}';
-    }
-});
-
-
-
-
-
-/**
- * all campus
- * http://localhost/tesis/austral_api/public/index.php/v1/campus
- */
-$app->get('/v1/campusa', function(Request $request, Response $response){
     $sql_campus = "SELECT * FROM CAMPUS ORDER BY ID_CAMPUS ASC";
     $sql_total_campus = "SELECT count(*) AS TOTAL_CAMPUS FROM CAMPUS";
 
@@ -111,19 +43,6 @@ $app->get('/v1/campusa', function(Request $request, Response $response){
 
         $json_campus = json_encode($campus, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 
-        /*$json_geo = '{
-            "total_campus": '.$datos_total_campus[0]->TOTAL_CAMPUS.',
-            "campus": [
-                {
-                  "id_campus": 3,
-                  "nombre_campus": "uach",
-                  "direccion_campus": "nose",
-                  "latitud_campus": -41.490345,
-                  "longitud_campus": -72.896154
-                }
-            ]
-        }';*/
-
         $json_geo = '{
             "total_campus": '.$datos_total_campus[0]->TOTAL_CAMPUS.',
             "campus":'.$json_campus.'
@@ -136,10 +55,30 @@ $app->get('/v1/campusa', function(Request $request, Response $response){
     }
 });
 
+/**
+ * all unidades
+ * http://localhost/tesis/austral_api/public/index.php/v1/unidades
+ */
+$app->get('/v1/unidades', function(Request $request, Response $response){
+    $sql1 = "SELECT * FROM UNIDAD ORDER BY ID_UNIDAD ASC";
 
+    try{
+        $db = new db();
+        $db = $db->connect();
 
+        $stmt1 = $db->query($sql1);
+        $datos1 = $stmt1->fetchAll(PDO::FETCH_OBJ);
 
+        $db = null;
 
+        $json1 = json_encode($datos1, JSON_UNESCAPED_UNICODE);
+
+		echo $json1;
+
+    } catch(PDOException $e){
+        echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
 
 /**
  * all data campus by id
