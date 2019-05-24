@@ -43,12 +43,47 @@ $app->get('/v1/campus', function(Request $request, Response $response){
 
         $json_campus = json_encode($campus, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 
-        $json_geo = '{
+        $json = '{
             "total_campus": '.$datos_total_campus[0]->TOTAL_CAMPUS.',
             "campus":'.$json_campus.'
         }';
         
-        echo $json_geo;
+        echo $json;
+
+    } catch(PDOException $e){
+        echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+
+/**
+ * all unidades id campus
+ * http://localhost/tesis/austral_api/public/index.php/v1/campus/{id}
+ */
+$app->get('/v1/campus/{id}', function(Request $request, Response $response){
+    $id = $request->getAttribute('id');
+    $sql_unidades = "SELECT * FROM UNIDAD WHERE ID_CAMPUS = '$id'";
+
+    try{
+        $db = new db();
+        $db = $db->connect();
+
+        $stmt_unidades = $db->query($sql_unidades);
+        $datos_unidades = $stmt_unidades->fetchAll(PDO::FETCH_OBJ);
+        $longitud_unidades = count($datos_unidades);
+
+        $db = null;
+
+        $unidades = array();
+
+        for($i=0; $i<$longitud_unidades; $i++) {
+            $object = (object) array("id_unidad" => $datos_unidades[$i]->ID_UNIDAD, "id_campus" => $datos_unidades[$i]->ID_CAMPUS, "nombre_unidad" => $datos_unidades[$i]->NOMBRE_UNIDAD, "descripcion_unidad" => $datos_unidades[$i]->DESCRIPCION_UNIDAD, "latitud_unidad" => $datos_unidades[$i]->LATITUD_UNIDAD, "longitud_unidad" => $datos_unidades[$i]->LONGITUD_UNIDAD);
+            array_push($unidades, $object);
+        }
+
+        $json = json_encode($unidades, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+        
+        echo $json;
 
     } catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
@@ -76,60 +111,6 @@ $app->get('/v1/unidades', function(Request $request, Response $response){
 		echo $json1;
 
     } catch(PDOException $e){
-        echo '{"error": {"text": '.$e->getMessage().'}';
-    }
-});
-
-/**
- * all data campus by id
- * http://localhost/tesis/austral_api/public/index.php/v1/campus/{id}
- */
-$app->get('/v1/campus/{id}', function(Request $request, Response $response){
-    $id = $request->getAttribute('id');
-    $sql_campus = "SELECT *, (SELECT COUNT(*) FROM UNIDAD WHERE UNIDAD.ID_CAMPUS = CAMPUS.ID_CAMPUS) AS TOTAL_UNIDADES FROM CAMPUS WHERE ID_CAMPUS = '$id'";
-    $sql_unidades = "SELECT * FROM UNIDAD WHERE ID_CAMPUS = '$id'";
-
-    try{
-        $db = new db();
-        $db = $db->connect();
-
-        $stmt_campus = $db->query($sql_campus);
-        $datos_campus = $stmt_campus->fetchAll(PDO::FETCH_OBJ);
-        $longitud_campus = count($datos_campus);
-
-        $stmt_unidades = $db->query($sql_unidades);
-        $datos_unidades = $stmt_unidades->fetchAll(PDO::FETCH_OBJ);
-        $longitud_unidades = count($datos_unidades);
-
-        $db = null;
-
-        $json = array();
-        $unidades = array();
-
-        for($i=0; $i<$longitud_unidades; $i++) {
-            $object = (object) array("id_unidad" => $datos_unidades[$i]->ID_UNIDAD, "id_campus" => $datos_unidades[$i]->ID_CAMPUS, "nombre_unidad" => $datos_unidades[$i]->NOMBRE_UNIDAD, "descripcion_unidad" => $datos_unidades[$i]->DESCRIPCION_UNIDAD, "latitud_unidad" => $datos_unidades[$i]->LATITUD_UNIDAD, "longitud_unidad" => $datos_unidades[$i]->LONGITUD_UNIDAD);
-            array_push($unidades, $object);
-        }
-
-        for($i=0; $i<$longitud_campus; $i++) {
-            $object = (object) array("id_campus" => $datos_campus[$i]->ID_CAMPUS, "nombre_campus" => $datos_campus[$i]->NOMBRE_CAMPUS, "direccion_campus" => $datos_campus[$i]->DIRECCION_CAMPUS, "latitud_campus" => $datos_campus[$i]->LATITUD_CAMPUS, "longitud_campus" => $datos_campus[$i]->LONGITUD_CAMPUS, "total_unidades" => $datos_campus[$i]->TOTAL_UNIDADES, "unidades" => $unidades);
-            array_push($json, $object);
-        }
-
-        echo json_encode($json, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-        
-        /*$longitud_campus = count($datos_campus);
-
-        for($i=0; $i<$longitud_campus; $i++) {
-            $object = (object) array("id_campus" => $datos_campus[$i]->ID_CAMPUS, "nombre_campus" => $datos_campus[$i]->NOMBRE_CAMPUS, "direccion_campus" => $datos_campus[$i]->DIRECCION_CAMPUS, "latitud_campus" => $datos_campus[$i]->LATITUD_CAMPUS, "longitud_campus" => $datos_campus[$i]->LONGITUD_CAMPUS, "total_unidades" => $datos_campus[$i]->TOTAL_UNIDADES, "unidades" => $datos_unidades);
-        }
-
-        echo json_encode($object, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);*/
-
-        //$obj = (object) ["NOMBRE_CAMPUS" => $datos_campus[0]->NOMBRE_CAMPUS,"unidades" => $datos_unidades];
-        //echo json_encode($obj);
-    } 
-    catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
     }
 });
