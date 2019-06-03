@@ -94,9 +94,11 @@ $app->get('/v1/campus/{id}', function(Request $request, Response $response){
  * unidad by id campus
  * http://localhost/tesis/austral_api/public/index.php/v1/unidad/{id}
  */
-$app->get('/v1/unidad/{id}', function(Request $request, Response $response){
+$app->get('/v1/unidad/{id}&{id_campus}', function(Request $request, Response $response){
     $id = $request->getAttribute('id');
     $sql_unidad = "SELECT * FROM UNIDAD WHERE ID_UNIDAD = '$id'";
+    $id_campus = $request->getAttribute('id_campus');
+    $sql_nodos = "SELECT * FROM NODO WHERE ID_CAMPUS = '$id_campus'";
     try{
         $db = new db();
         $db = $db->connect();
@@ -105,12 +107,26 @@ $app->get('/v1/unidad/{id}', function(Request $request, Response $response){
         $datos_unidad = $stmt_unidad->fetchAll(PDO::FETCH_OBJ);
         $longitud_unidad = count($datos_unidad);
 
+
+        $stmt_nodos = $db->query($sql_nodos);
+        $datos_nodos = $stmt_nodos->fetchAll(PDO::FETCH_OBJ);
+        $longitud_nodos = count($datos_nodos);
+
+
+
         $db = null;
+
+        $nodos = array();
+
+        for($i=0; $i<$longitud_nodos; $i++) {
+            $object = (object) array("id_nodo" => $datos_nodos[$i]->ID_NODO, "id_campus" => $datos_nodos[$i]->ID_CAMPUS, "latitud_nodo" => $datos_nodos[$i]->LATITUD_NODO, "longitud_nodo" => $datos_nodos[$i]->LONGITUD_NODO, 'conexiones' => conexionNodoNodo($datos_nodos[$i]->ID_NODO));
+            array_push($nodos, $object);
+        }
 
         $objectx = (object) array();
 
         for($i=0; $i<$longitud_unidad; $i++) {
-            $objectx = (object) array("id_unidad" => $datos_unidad[0]->ID_UNIDAD, "id_campus" => $datos_unidad[0]->ID_CAMPUS, "nombre_unidad" => $datos_unidad[0]->NOMBRE_UNIDAD, "descripcion_unidad" => $datos_unidad[0]->DESCRIPCION_UNIDAD, "latitud_unidad" => $datos_unidad[0]->LATITUD_UNIDAD, "longitud_unidad" => $datos_unidad[0]->LONGITUD_UNIDAD, 'conexiones' => conexionUnidadNodo($datos_unidad[$i]->ID_UNIDAD));
+            $objectx = (object) array("id_unidad" => $datos_unidad[0]->ID_UNIDAD, "id_campus" => $datos_unidad[0]->ID_CAMPUS, "nombre_unidad" => $datos_unidad[0]->NOMBRE_UNIDAD, "descripcion_unidad" => $datos_unidad[0]->DESCRIPCION_UNIDAD, "latitud_unidad" => $datos_unidad[0]->LATITUD_UNIDAD, "longitud_unidad" => $datos_unidad[0]->LONGITUD_UNIDAD, 'conexiones' => conexionUnidadNodo($datos_unidad[$i]->ID_UNIDAD), 'nodos' => $nodos);
         }
 
         $json = json_encode($objectx, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
