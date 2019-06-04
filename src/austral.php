@@ -273,7 +273,7 @@ function conexionUnidadNodo ($id_unidad){
 
         //Conexiones unidad
         for($i=0; $i<$longitud_arista_unidad; $i++){
-            $object = (object) array('destino' => $datos_arista_unidad[$i]->ID_NODO, 'distancia' => $datos_arista_unidad[$i]->DISTANCIA_UNIIDAD);
+            $object = (object) array('destino' => $datos_arista_unidad[$i]->ID_NODO, 'distancia' => $datos_arista_unidad[$i]->DISTANCIA_UNIDAD);
             array_push($conexiones, $object);
         }
     
