@@ -14,8 +14,7 @@ $app->add(function ($req, $res, $next) {
 });
 
 /**
- * all campus
- * http://localhost/tesis/austral_api/public/index.php/v1/campus
+ * get all campus
  */
 $app->get('/v1/campus', function(Request $request, Response $response){
     $sql_campus = "SELECT * FROM CAMPUS ORDER BY ID_CAMPUS ASC";
@@ -56,8 +55,7 @@ $app->get('/v1/campus', function(Request $request, Response $response){
 });
 
 /**
- * all unidades id campus
- * http://localhost/tesis/austral_api/public/index.php/v1/campus/{id}
+ * get all unidades con sus conexiones a nodos by id campus
  */
 $app->get('/v1/campus/{id}', function(Request $request, Response $response){
     $id = $request->getAttribute('id');
@@ -76,7 +74,7 @@ $app->get('/v1/campus/{id}', function(Request $request, Response $response){
         $unidades = array();
 
         for($i=0; $i<$longitud_unidades; $i++) {
-            $object = (object) array("id_unidad" => $datos_unidades[$i]->ID_UNIDAD, "id_campus" => $datos_unidades[$i]->ID_CAMPUS, "nombre_unidad" => $datos_unidades[$i]->NOMBRE_UNIDAD, "descripcion_unidad" => $datos_unidades[$i]->DESCRIPCION_UNIDAD, "latitud_unidad" => $datos_unidades[$i]->LATITUD_UNIDAD, "longitud_unidad" => $datos_unidades[$i]->LONGITUD_UNIDAD);
+            $object = (object) array("id_unidad" => $datos_unidades[$i]->ID_UNIDAD, "id_campus" => $datos_unidades[$i]->ID_CAMPUS, "nombre_unidad" => $datos_unidades[$i]->NOMBRE_UNIDAD, "descripcion_unidad" => $datos_unidades[$i]->DESCRIPCION_UNIDAD, "latitud_unidad" => $datos_unidades[$i]->LATITUD_UNIDAD, "longitud_unidad" => $datos_unidades[$i]->LONGITUD_UNIDAD, 'conexiones' => conexionUnidadNodo($datos_unidades[$i]->ID_UNIDAD));
             array_push($unidades, $object);
         }
 
@@ -88,7 +86,6 @@ $app->get('/v1/campus/{id}', function(Request $request, Response $response){
         echo '{"error": {"text": '.$e->getMessage().'}';
     }
 });
-
 
 /**
  * unidad by id campus
@@ -136,39 +133,7 @@ $app->get('/v1/unidad/{id}&{id_campus}', function(Request $request, Response $re
     }
 });
 
-/**
- * all unidades id campus
- * http://localhost/tesis/austral_api/public/index.php/v1/campus/{id}
- */
-$app->get('/v1/campustest/{id}', function(Request $request, Response $response){
-    $id = $request->getAttribute('id');
-    $sql_unidades = "SELECT * FROM UNIDAD WHERE ID_CAMPUS = '$id'";
 
-    try{
-        $db = new db();
-        $db = $db->connect();
-
-        $stmt_unidades = $db->query($sql_unidades);
-        $datos_unidades = $stmt_unidades->fetchAll(PDO::FETCH_OBJ);
-        $longitud_unidades = count($datos_unidades);
-
-        $db = null;
-
-        $unidades = array();
-
-        for($i=0; $i<$longitud_unidades; $i++) {
-            $object = (object) array("id_unidad" => $datos_unidades[$i]->ID_UNIDAD, "id_campus" => $datos_unidades[$i]->ID_CAMPUS, "nombre_unidad" => $datos_unidades[$i]->NOMBRE_UNIDAD, "descripcion_unidad" => $datos_unidades[$i]->DESCRIPCION_UNIDAD, "latitud_unidad" => $datos_unidades[$i]->LATITUD_UNIDAD, "longitud_unidad" => $datos_unidades[$i]->LONGITUD_UNIDAD, 'conexiones' => conexionUnidadNodo($datos_unidades[$i]->ID_UNIDAD));
-            array_push($unidades, $object);
-        }
-
-        $json = json_encode($unidades, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-        
-        echo $json;
-
-    } catch(PDOException $e){
-        echo '{"error": {"text": '.$e->getMessage().'}';
-    }
-});
 
 /**
  * all nodos id campus
