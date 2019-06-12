@@ -130,99 +130,9 @@ $app->get('/v1/campus/{id_campus}/unidad/{id_unidad}', function(Request $request
     }
 });
 
-
-
-
-
-
-
-
-
-
-
 /**
- * get single unidad con all nodos y sus conexiones by id campus
- *//*
-$app->get('/v1/unidad/{id}&{id_campus}', function(Request $request, Response $response){
-    $id = $request->getAttribute('id');
-    $sql_unidad = "SELECT * FROM UNIDAD WHERE ID_UNIDAD = '$id'";
-    $id_campus = $request->getAttribute('id_campus');
-    $sql_nodos = "SELECT * FROM NODO WHERE ID_CAMPUS = '$id_campus'";
-    try{
-        $db = new db();
-        $db = $db->connect();
-
-        $stmt_unidad = $db->query($sql_unidad);
-        $datos_unidad = $stmt_unidad->fetchAll(PDO::FETCH_OBJ);
-        $longitud_unidad = count($datos_unidad);
-
-        $stmt_nodos = $db->query($sql_nodos);
-        $datos_nodos = $stmt_nodos->fetchAll(PDO::FETCH_OBJ);
-        $longitud_nodos = count($datos_nodos);
-
-        $db = null;
-
-        $nodos = array();
-
-        for($i=0; $i<$longitud_nodos; $i++) {
-            $object = (object) array("id_nodo" => $datos_nodos[$i]->ID_NODO, "id_campus" => $datos_nodos[$i]->ID_CAMPUS, "latitud_nodo" => $datos_nodos[$i]->LATITUD_NODO, "longitud_nodo" => $datos_nodos[$i]->LONGITUD_NODO, 'conexiones' => conexionNodoNodo($datos_nodos[$i]->ID_NODO));
-            array_push($nodos, $object);
-        }
-
-        $objectx = (object) array();
-
-        for($i=0; $i<$longitud_unidad; $i++) {
-            $objectx = (object) array("id_unidad" => $datos_unidad[0]->ID_UNIDAD, "id_campus" => $datos_unidad[0]->ID_CAMPUS, "nombre_unidad" => $datos_unidad[0]->NOMBRE_UNIDAD, "descripcion_unidad" => $datos_unidad[0]->DESCRIPCION_UNIDAD, "latitud_unidad" => $datos_unidad[0]->LATITUD_UNIDAD, "longitud_unidad" => $datos_unidad[0]->LONGITUD_UNIDAD, 'conexiones' => conexionUnidadNodo($datos_unidad[$i]->ID_UNIDAD), 'nodos' => $nodos);
-        }
-
-        $json = json_encode($objectx, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-        echo $json;
-
-    } catch(PDOException $e){
-        echo '{"error": {"text": '.$e->getMessage().'}';
-    }
-});
-*/
-
-/**
- * all nodos id campus
- * http://localhost/tesis/austral_api/public/index.php/v1/nodos/{id}
+ * función que entrega las conexiones de un nodo
  */
-$app->get('/v1/nodos/{id}', function(Request $request, Response $response){
-    $id = $request->getAttribute('id');
-    $sql_nodos = "SELECT * FROM NODO WHERE ID_CAMPUS = '$id'";
-
-    try{
-        $db = new db();
-        $db = $db->connect();
-
-        $stmt_nodos = $db->query($sql_nodos);
-        $datos_nodos = $stmt_nodos->fetchAll(PDO::FETCH_OBJ);
-        $longitud_nodos = count($datos_nodos);
-
-        $db = null;
-
-        $nodos = array();
-
-        for($i=0; $i<$longitud_nodos; $i++) {
-            $object = (object) array("id_nodo" => $datos_nodos[$i]->ID_NODO, "id_campus" => $datos_nodos[$i]->ID_CAMPUS, "latitud_nodo" => $datos_nodos[$i]->LATITUD_NODO, "longitud_nodo" => $datos_nodos[$i]->LONGITUD_NODO, 'conexiones' => conexionNodoNodo($datos_nodos[$i]->ID_NODO));
-            array_push($nodos, $object);
-        }
-
-        /*for($i=0; $i<$longitud_nodos; $i++) {
-            $object = (object) array("id_nodo" => $datos_nodos[$i]->ID_NODO, "id_campus" => $datos_nodos[$i]->ID_CAMPUS, "latitud_nodo" => $datos_nodos[$i]->LATITUD_NODO, "longitud_nodo" => $datos_nodos[$i]->LONGITUD_NODO);
-            array_push($nodos, $object);
-        }*/
-
-        $json = json_encode($nodos, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-        
-        echo $json;
-
-    } catch(PDOException $e){
-        echo '{"error": {"text": '.$e->getMessage().'}';
-    }
-});
-
 function conexionNodoNodo ($id_nodo){
     //Conexiones camino
     $sql_arista_nodo = "SELECT * FROM ARISTA_NODO WHERE ID_NODO = ".$id_nodo;
@@ -252,12 +162,6 @@ function conexionNodoNodo ($id_nodo){
             $object = (object) array('destino' => $datos_arista_nodo[$i]->NOD_ID_NODO, 'distancia' => $datos_arista_nodo[$i]->DISTANCIA_NODO);
             array_push($conexiones, $object);
         }
-
-        //Conexiones entidad
-        /*for($i=0; $i<$longitud_arista_unidad; $i++){
-            $object = (object) array('class' => 'Unidad', 'origen' => $datos_arista_unidad[$i]->ID_NODO, 'destino' => $datos_arista_unidad[$i]->ID_UNIDAD);
-            array_push($conexiones, $object);
-        }*/
     
         return $conexiones;
 
@@ -300,74 +204,8 @@ function conexionUnidadNodo ($id_unidad){
     }
 }
 
-
 /**
- * all nodos id campus
- * http://localhost/tesis/austral_api/public/index.php/v1/campus/{id}
- */
-$app->get('/v1/nodostest/{id}', function(Request $request, Response $response){
-    $id = $request->getAttribute('id');
-    $sql_nodos = "SELECT * FROM NODO WHERE ID_CAMPUS = '$id'";
-
-    try{
-        $db = new db();
-        $db = $db->connect();
-
-        $stmt_nodos = $db->query($sql_nodos);
-        $datos_nodos = $stmt_nodos->fetchAll(PDO::FETCH_OBJ);
-        $longitud_nodos = count($datos_nodos);
-
-        $db = null;
-
-        $nodos = array();
-
-        for($i=0; $i<$longitud_nodos; $i++) {
-            $object = (object) array("id_nodo" => $datos_nodos[$i]->ID_NODO, "id_campus" => $datos_nodos[$i]->ID_CAMPUS, "latitud_nodo" => $datos_nodos[$i]->LATITUD_NODO, "longitud_nodo" => $datos_nodos[$i]->LONGITUD_NODO, 'conexiones' => conexionNodoNodo($datos_nodos[$i]->ID_NODO));
-            array_push($nodos, $object);
-        }
-
-        /*for($i=0; $i<$longitud_nodos; $i++) {
-            $object = (object) array("id_nodo" => $datos_nodos[$i]->ID_NODO, "id_campus" => $datos_nodos[$i]->ID_CAMPUS, "latitud_nodo" => $datos_nodos[$i]->LATITUD_NODO, "longitud_nodo" => $datos_nodos[$i]->LONGITUD_NODO);
-            array_push($nodos, $object);
-        }*/
-
-        $json = json_encode($nodos, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-        
-        echo $json;
-
-    } catch(PDOException $e){
-        echo '{"error": {"text": '.$e->getMessage().'}';
-    }
-});
-
-/**
- * all unidades
- * http://localhost/tesis/austral_api/public/index.php/v1/unidades
- */
-$app->get('/v1/unidades', function(Request $request, Response $response){
-    $sql1 = "SELECT * FROM UNIDAD ORDER BY ID_UNIDAD ASC";
-
-    try{
-        $db = new db();
-        $db = $db->connect();
-
-        $stmt1 = $db->query($sql1);
-        $datos1 = $stmt1->fetchAll(PDO::FETCH_OBJ);
-
-        $db = null;
-
-        $json1 = json_encode($datos1, JSON_UNESCAPED_UNICODE);
-
-		echo $json1;
-
-    } catch(PDOException $e){
-        echo '{"error": {"text": '.$e->getMessage().'}';
-    }
-});
-
-/**
- * geo.json correspondiente a la base de datos 10
- * http://localhost/tesis/austral_api/public/index.php/v1/geo10.json
+ * get geo.json de toda la base de datos
  */
 $app->get('/v1/geo10.json', function(Request $request, Response $response){
     //Campus points
@@ -465,80 +303,6 @@ $app->get('/v1/geo10.json', function(Request $request, Response $response){
         echo '{"error": {"text": '.$e->getMessage().'}';
     }
 });
-
-/*function conexionCaminoCamino ($id_camino){
-    //Conexiones camino
-    $sql_conexion_camino = "SELECT * FROM CONEXION_CAMINO WHERE ID_CAMINO = ".$id_camino;
-    //Conexiones entidad
-    $sql_conexion_unidad = "SELECT * FROM CONEXION_UNIDAD WHERE ID_CAMINO = ".$id_camino;
-
-    try{
-        $db = new db();
-        $db = $db->connect();
-
-        //Conexiones camino
-        $stmt_conexion_camino = $db->query($sql_conexion_camino);
-        $datos_conexion_camino = $stmt_conexion_camino->fetchAll(PDO::FETCH_OBJ);
-        //Conexiones entidad
-        $stmt_conexion_unidad = $db->query($sql_conexion_unidad);
-        $datos_conexion_unidad = $stmt_conexion_unidad->fetchAll(PDO::FETCH_OBJ);
-
-        $db = null;
-        $conexiones = array();
-        //Conexiones camino
-        $longitud_conexion_camino = count($datos_conexion_camino);
-        //Conexiones camino
-        $longitud_conexion_unidad = count($datos_conexion_unidad);
-
-        //Conexiones camino
-        for($i=0; $i<$longitud_conexion_camino; $i++){
-            $object = (object) array('class' => 'Camino', 'origen' => $datos_conexion_camino[$i]->ID_CAMINO, 'destino' => $datos_conexion_camino[$i]->CAM_ID_CAMINO);
-            array_push($conexiones, $object);
-        }
-
-        //Conexiones entidad
-        for($i=0; $i<$longitud_conexion_unidad; $i++){
-            $object = (object) array('class' => 'Unidad', 'origen' => $datos_conexion_unidad[$i]->ID_CAMINO, 'destino' => $datos_conexion_unidad[$i]->ID_UNIDAD);
-            array_push($conexiones, $object);
-        }
-    
-        return $conexiones;
-    } 
-    catch(PDOException $e){
-        return '{"error": {"text": '.$e->getMessage().'}';
-    }
-}*/
-
-/*function conexionUnidadCamino ($id_unidad){
-    //Conexiones unidad
-    $sql_conexion_unidad = "SELECT * FROM CONEXION_UNIDAD WHERE ID_UNIDAD = ".$id_unidad;
-
-    try{
-        $db = new db();
-        $db = $db->connect();
-        
-        //Conexiones unidad
-        $stmt_conexion_unidad = $db->query($sql_conexion_unidad);
-        $datos_conexion_unidad = $stmt_conexion_unidad->fetchAll(PDO::FETCH_OBJ);
-
-        $db = null;
-        $conexiones = array();
-
-        //Conexiones unidad
-        $longitud_conexion_unidad = count($datos_conexion_unidad);
-
-        //Conexiones unidad
-        for($i=0; $i<$longitud_conexion_unidad; $i++){
-            $object = (object) array('class' => 'Unidad', 'origen' => $datos_conexion_unidad[$i]->ID_UNIDAD, 'destino' => $datos_conexion_unidad[$i]->ID_CAMINO);
-            array_push($conexiones, $object);
-        }
-    
-        return $conexiones;
-    } 
-    catch(PDOException $e){
-        return '{"error": {"text": '.$e->getMessage().'}';
-    }
-}*/
 
 function aristaNodoNodo ($id_nodo){
     //Conexiones camino
