@@ -205,6 +205,91 @@ function conexionUnidadNodo ($id_unidad){
 }
 
 /**
+ * get all personas por campus
+ */
+$app->get('/v1/campus/{id_campus}/persona', function(Request $request, Response $response){
+    $param_campus = $request->getAttribute('id_campus');
+    $sql_persona = "SELECT C.ID_CAMPUS, B.ID_UNIDAD, A.ID_PERSONA, A.PRIMER_NOMBRE_PERSONA, A.SEGUNDO_NOMBRE_PERSONA, A.PRIMER_APELLIDO_PERSONA, A.SEGUNDO_APELLIDO_PEROSNA, A.CARGO_PERSONA, A.CORREO_PERSONA, A.FONO_PERSONA FROM PERSONA AS A INNER JOIN UNIDAD AS B ON A.ID_UNIDAD = B.ID_UNIDAD INNER JOIN CAMPUS AS C ON C.ID_CAMPUS = B.ID_CAMPUS WHERE C.ID_CAMPUS = '$param_campus' ORDER BY ID_PERSONA ASC";
+    $sql_total_persona = "SELECT count(*) AS TOTAL_PERSONAS FROM PERSONA AS A INNER JOIN UNIDAD AS B ON A.ID_UNIDAD = B.ID_UNIDAD INNER JOIN CAMPUS AS C ON C.ID_CAMPUS = B.ID_CAMPUS WHERE C.ID_CAMPUS = '$param_campus' ORDER BY ID_PERSONA ASC";
+
+    try{
+        $db = new db();
+        $db = $db->connect();
+
+        $stmt_persona = $db->query($sql_persona);
+        $datos_persona = $stmt_persona->fetchAll(PDO::FETCH_OBJ);
+        $longitud_persona = count($datos_persona);
+
+        $stmt_total_persona = $db->query($sql_total_persona);
+        $datos_total_persona = $stmt_total_persona->fetchAll(PDO::FETCH_OBJ);
+
+        $db = null;
+
+        $persona = array();
+
+        for($i=0; $i<$longitud_persona; $i++) {
+            $object = (object) array("id_persona" => $datos_persona[$i]->ID_PERSONA, "primer_nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA, "segundo_nombre_persona" => $datos_persona[$i]->SEGUNDO_NOMBRE_PERSONA, "primer_apellido_persona" => $datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "segundo_apellido_persona" => $datos_persona[$i]->SEGUNDO_APELLIDO_PERSONA, "cargo_persona" => $datos_persona[$i]->CARGO_PERSONA, "correo_persona" => $datos_persona[$i]->CORREO_PERSONA, "fono_persona" => $datos_persona[$i]->FONO_PERSONA);
+            array_push($persona, $object);
+        }
+
+        $json_persona = json_encode($persona, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+
+        $json = '{
+            "total_personas": '.$datos_total_persona[0]->TOTAL_PERSONAS.',
+            "personas":'.$json_persona.'
+        }';
+        
+        echo $json;
+
+    } catch(PDOException $e){
+        echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+/**
+ * get all personas por campus filtradas por nombre
+ */
+$app->get('/v1/campus/{id_campus}/persona/{nombre_persona}', function(Request $request, Response $response){
+    $param_campus = $request->getAttribute('id_campus');
+    $param_nombre = $request->getAttribute('nombre_persona');
+    $sql_persona = "SELECT C.ID_CAMPUS, B.ID_UNIDAD, A.ID_PERSONA, A.PRIMER_NOMBRE_PERSONA, A.SEGUNDO_NOMBRE_PERSONA, A.PRIMER_APELLIDO_PERSONA, A.SEGUNDO_APELLIDO_PEROSNA, A.CARGO_PERSONA, A.CORREO_PERSONA, A.FONO_PERSONA FROM PERSONA AS A INNER JOIN UNIDAD AS B ON A.ID_UNIDAD = B.ID_UNIDAD INNER JOIN CAMPUS AS C ON C.ID_CAMPUS = B.ID_CAMPUS WHERE C.ID_CAMPUS = '$param_campus' and A.PRIMER_NOMBRE_PERSONA LIKE '%$param_nombre%' ORDER BY ID_PERSONA ASC";
+    $sql_total_persona = "SELECT count(*) AS TOTAL_PERSONAS FROM PERSONA AS A INNER JOIN UNIDAD AS B ON A.ID_UNIDAD = B.ID_UNIDAD INNER JOIN CAMPUS AS C ON C.ID_CAMPUS = B.ID_CAMPUS WHERE C.ID_CAMPUS = '$param_campus' and A.PRIMER_NOMBRE_PERSONA LIKE '%$param_nombre%' ORDER BY ID_PERSONA ASC";
+
+    try{
+        $db = new db();
+        $db = $db->connect();
+
+        $stmt_persona = $db->query($sql_persona);
+        $datos_persona = $stmt_persona->fetchAll(PDO::FETCH_OBJ);
+        $longitud_persona = count($datos_persona);
+
+        $stmt_total_persona = $db->query($sql_total_persona);
+        $datos_total_persona = $stmt_total_persona->fetchAll(PDO::FETCH_OBJ);
+
+        $db = null;
+
+        $persona = array();
+
+        for($i=0; $i<$longitud_persona; $i++) {
+            $object = (object) array("id_persona" => $datos_persona[$i]->ID_PERSONA, "primer_nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA, "segundo_nombre_persona" => $datos_persona[$i]->SEGUNDO_NOMBRE_PERSONA, "primer_apellido_persona" => $datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "segundo_apellido_persona" => $datos_persona[$i]->SEGUNDO_APELLIDO_PERSONA, "cargo_persona" => $datos_persona[$i]->CARGO_PERSONA, "correo_persona" => $datos_persona[$i]->CORREO_PERSONA, "fono_persona" => $datos_persona[$i]->FONO_PERSONA);
+            array_push($persona, $object);
+        }
+
+        $json_persona = json_encode($persona, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+
+        $json = '{
+            "total_personas": '.$datos_total_persona[0]->TOTAL_PERSONAS.',
+            "personas":'.$json_persona.'
+        }';
+        
+        echo $json;
+
+    } catch(PDOException $e){
+        echo '{"error": {"text": '.$e->getMessage().'}';
+    }
+});
+
+/**
  * get geo.json de toda la base de datos
  */
 $app->get('/v1/geo.json', function(Request $request, Response $response){
