@@ -207,7 +207,7 @@ function conexionUnidadNodo ($id_unidad){
 /**
  * get all personas por campus
  */
-$app->get('/v1/campus/{id_campus}/persona', function(Request $request, Response $response){
+$app->get('/v1/campus/{id_campus}/persona/', function(Request $request, Response $response){
     $param_campus = $request->getAttribute('id_campus');
     $sql_persona = "SELECT C.ID_CAMPUS, B.ID_UNIDAD, A.ID_PERSONA, A.PRIMER_NOMBRE_PERSONA, A.SEGUNDO_NOMBRE_PERSONA, A.PRIMER_APELLIDO_PERSONA, A.SEGUNDO_APELLIDO_PEROSNA, A.CARGO_PERSONA, A.CORREO_PERSONA, A.FONO_PERSONA FROM PERSONA AS A INNER JOIN UNIDAD AS B ON A.ID_UNIDAD = B.ID_UNIDAD INNER JOIN CAMPUS AS C ON C.ID_CAMPUS = B.ID_CAMPUS WHERE C.ID_CAMPUS = '$param_campus' ORDER BY ID_PERSONA ASC";
     $sql_total_persona = "SELECT count(*) AS TOTAL_PERSONAS FROM PERSONA AS A INNER JOIN UNIDAD AS B ON A.ID_UNIDAD = B.ID_UNIDAD INNER JOIN CAMPUS AS C ON C.ID_CAMPUS = B.ID_CAMPUS WHERE C.ID_CAMPUS = '$param_campus' ORDER BY ID_PERSONA ASC";
@@ -233,13 +233,8 @@ $app->get('/v1/campus/{id_campus}/persona', function(Request $request, Response 
         }
 
         $json_persona = json_encode($persona, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-
-        $json = '{
-            "total_personas": '.$datos_total_persona[0]->TOTAL_PERSONAS.',
-            "personas":'.$json_persona.'
-        }';
         
-        echo $json;
+        echo $json_persona;
 
     } catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
@@ -276,13 +271,8 @@ $app->get('/v1/campus/{id_campus}/persona/{nombre_persona}', function(Request $r
         }
 
         $json_persona = json_encode($persona, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-
-        $json = '{
-            "total_personas": '.$datos_total_persona[0]->TOTAL_PERSONAS.',
-            "personas":'.$json_persona.'
-        }';
         
-        echo $json;
+        echo $json_persona;
 
     } catch(PDOException $e){
         echo '{"error": {"text": '.$e->getMessage().'}';
