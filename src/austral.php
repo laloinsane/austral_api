@@ -238,7 +238,7 @@ $app->get('/v1/campus/{id_campus}/persona/', function(Request $request, Response
 });
 
 /**
- * get all personas por campus filtradas por nombre
+ * get all personas por campus filtradas por nombre y/o apellido
  */
 $app->get('/v1/campus/{id_campus}/persona/{nombre_persona}', function(Request $request, Response $response){
     $param_campus = $request->getAttribute('id_campus');
