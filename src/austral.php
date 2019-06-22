@@ -224,7 +224,7 @@ $app->get('/v1/campus/{id_campus}/persona/', function(Request $request, Response
         $persona = array();
 
         for($i=0; $i<$longitud_persona; $i++) {
-            $object = (object) array("id_persona" => $datos_persona[$i]->ID_PERSONA, "nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA." ".$datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "primer_nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA, "segundo_nombre_persona" => $datos_persona[$i]->SEGUNDO_NOMBRE_PERSONA, "primer_apellido_persona" => $datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "segundo_apellido_persona" => $datos_persona[$i]->SEGUNDO_APELLIDO_PERSONA, "cargo_persona" => $datos_persona[$i]->CARGO_PERSONA, "correo_persona" => $datos_persona[$i]->CORREO_PERSONA, "fono_persona" => $datos_persona[$i]->FONO_PERSONA);
+            $object = (object) array("id_persona" => $datos_persona[$i]->ID_PERSONA, "id_unidad" => $datos_persona[$i]->ID_UNIDAD, "nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA." ".$datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "primer_nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA, "segundo_nombre_persona" => $datos_persona[$i]->SEGUNDO_NOMBRE_PERSONA, "primer_apellido_persona" => $datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "segundo_apellido_persona" => $datos_persona[$i]->SEGUNDO_APELLIDO_PERSONA, "cargo_persona" => $datos_persona[$i]->CARGO_PERSONA, "correo_persona" => $datos_persona[$i]->CORREO_PERSONA, "fono_persona" => $datos_persona[$i]->FONO_PERSONA);
             array_push($persona, $object);
         }
 
@@ -258,7 +258,7 @@ $app->get('/v1/campus/{id_campus}/persona/{nombre_persona}', function(Request $r
         $persona = array();
 
         for($i=0; $i<$longitud_persona; $i++) {
-            $object = (object) array("id_persona" => $datos_persona[$i]->ID_PERSONA, "nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA." ".$datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "primer_nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA, "segundo_nombre_persona" => $datos_persona[$i]->SEGUNDO_NOMBRE_PERSONA, "primer_apellido_persona" => $datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "segundo_apellido_persona" => $datos_persona[$i]->SEGUNDO_APELLIDO_PERSONA, "cargo_persona" => $datos_persona[$i]->CARGO_PERSONA, "correo_persona" => $datos_persona[$i]->CORREO_PERSONA, "fono_persona" => $datos_persona[$i]->FONO_PERSONA);
+            $object = (object) array("id_persona" => $datos_persona[$i]->ID_PERSONA, "id_unidad" => $datos_persona[$i]->ID_UNIDAD, "nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA." ".$datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "primer_nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA, "segundo_nombre_persona" => $datos_persona[$i]->SEGUNDO_NOMBRE_PERSONA, "primer_apellido_persona" => $datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "segundo_apellido_persona" => $datos_persona[$i]->SEGUNDO_APELLIDO_PERSONA, "cargo_persona" => $datos_persona[$i]->CARGO_PERSONA, "correo_persona" => $datos_persona[$i]->CORREO_PERSONA, "fono_persona" => $datos_persona[$i]->FONO_PERSONA);
             array_push($persona, $object);
         }
 
