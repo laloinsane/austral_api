@@ -28,7 +28,5 @@ require __DIR__ . '/../src/middleware.php';
 // Register routes
 require __DIR__ . '/../src/routes.php';
 
-require '../src/austral.php';
-
 // Run app
 $app->run();
