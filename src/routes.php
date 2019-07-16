@@ -275,7 +275,7 @@ $app->get('/v1/campus/{id_campus}/persona/{nombre_persona}', function(Request $r
 /**
  * get geo.json de toda la base de datos
  */
-$app->get('/v1/geo.json', function(Request $request, Response $response){
+$app->get('/v1/data.geojson', function(Request $request, Response $response){
     //Campus points
     $sql_campus = "SELECT * FROM CAMPUS ORDER BY ID_CAMPUS ASC";
     //Unidad points
