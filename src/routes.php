@@ -210,7 +210,7 @@ function conexionUnidadNodo ($id_unidad){
  */
 $app->get('/v1/campus/{id_campus}/persona/', function(Request $request, Response $response){
     $param_campus = $request->getAttribute('id_campus');
-    $sql_persona = "SELECT C.ID_CAMPUS, B.ID_UNIDAD, B.NOMBRE_UNIDAD, A.ID_PERSONA, A.PRIMER_NOMBRE_PERSONA, A.SEGUNDO_NOMBRE_PERSONA, A.PRIMER_APELLIDO_PERSONA, A.SEGUNDO_APELLIDO_PERSONA, A.CARGO_PERSONA, A.CORREO_PERSONA, A.FONO_PERSONA FROM PERSONA AS A INNER JOIN UNIDAD AS B ON A.ID_UNIDAD = B.ID_UNIDAD INNER JOIN CAMPUS AS C ON C.ID_CAMPUS = B.ID_CAMPUS WHERE C.ID_CAMPUS = '$param_campus' ORDER BY ID_PERSONA ASC";
+    $sql_persona = "SELECT C.ID_CAMPUS, B.ID_UNIDAD, B.NOMBRE_UNIDAD, B.LATITUD_UNIDAD, B.LONGITUD_UNIDAD, A.ID_PERSONA, A.PRIMER_NOMBRE_PERSONA, A.SEGUNDO_NOMBRE_PERSONA, A.PRIMER_APELLIDO_PERSONA, A.SEGUNDO_APELLIDO_PERSONA, A.CARGO_PERSONA, A.CORREO_PERSONA, A.FONO_PERSONA FROM PERSONA AS A INNER JOIN UNIDAD AS B ON A.ID_UNIDAD = B.ID_UNIDAD INNER JOIN CAMPUS AS C ON C.ID_CAMPUS = B.ID_CAMPUS WHERE C.ID_CAMPUS = '$param_campus' ORDER BY ID_PERSONA ASC";
 
     try{
         $db = new db();
@@ -225,7 +225,7 @@ $app->get('/v1/campus/{id_campus}/persona/', function(Request $request, Response
         $persona = array();
 
         for($i=0; $i<$longitud_persona; $i++) {
-            $object = (object) array("id_persona" => $datos_persona[$i]->ID_PERSONA, "id_unidad" => $datos_persona[$i]->ID_UNIDAD, "nombre_unidad" => $datos_persona[$i]->NOMBRE_UNIDAD, "nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA." ".$datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "primer_nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA, "segundo_nombre_persona" => $datos_persona[$i]->SEGUNDO_NOMBRE_PERSONA, "primer_apellido_persona" => $datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "segundo_apellido_persona" => $datos_persona[$i]->SEGUNDO_APELLIDO_PERSONA, "cargo_persona" => $datos_persona[$i]->CARGO_PERSONA, "correo_persona" => $datos_persona[$i]->CORREO_PERSONA, "fono_persona" => $datos_persona[$i]->FONO_PERSONA);
+            $object = (object) array("id_persona" => $datos_persona[$i]->ID_PERSONA, "id_unidad" => $datos_persona[$i]->ID_UNIDAD, "nombre_unidad" => $datos_persona[$i]->NOMBRE_UNIDAD, "latitud_unidad" => $datos_persona[$i]->LATITUD_UNIDAD, "longitud_unidad" => $datos_persona[$i]->LONGITUD_UNIDAD, "nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA." ".$datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "primer_nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA, "segundo_nombre_persona" => $datos_persona[$i]->SEGUNDO_NOMBRE_PERSONA, "primer_apellido_persona" => $datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "segundo_apellido_persona" => $datos_persona[$i]->SEGUNDO_APELLIDO_PERSONA, "cargo_persona" => $datos_persona[$i]->CARGO_PERSONA, "correo_persona" => $datos_persona[$i]->CORREO_PERSONA, "fono_persona" => $datos_persona[$i]->FONO_PERSONA);
             array_push($persona, $object);
         }
 
@@ -244,7 +244,7 @@ $app->get('/v1/campus/{id_campus}/persona/', function(Request $request, Response
 $app->get('/v1/campus/{id_campus}/persona/{nombre_persona}', function(Request $request, Response $response){
     $param_campus = $request->getAttribute('id_campus');
     $param_nombre = $request->getAttribute('nombre_persona');
-    $sql_persona = "SELECT C.ID_CAMPUS, B.ID_UNIDAD, B.NOMBRE_UNIDAD, A.ID_PERSONA, A.PRIMER_NOMBRE_PERSONA, A.SEGUNDO_NOMBRE_PERSONA, A.PRIMER_APELLIDO_PERSONA, A.SEGUNDO_APELLIDO_PERSONA, A.CARGO_PERSONA, A.CORREO_PERSONA, A.FONO_PERSONA FROM PERSONA AS A INNER JOIN UNIDAD AS B ON A.ID_UNIDAD = B.ID_UNIDAD INNER JOIN CAMPUS AS C ON C.ID_CAMPUS = B.ID_CAMPUS WHERE C.ID_CAMPUS = '$param_campus' and CONCAT(A.PRIMER_NOMBRE_PERSONA, ' ', A.PRIMER_APELLIDO_PERSONA) LIKE '%$param_nombre%' ORDER BY ID_PERSONA ASC";
+    $sql_persona = "SELECT C.ID_CAMPUS, B.ID_UNIDAD, B.NOMBRE_UNIDAD, B.LATITUD_UNIDAD, B.LONGITUD_UNIDAD, A.ID_PERSONA, A.PRIMER_NOMBRE_PERSONA, A.SEGUNDO_NOMBRE_PERSONA, A.PRIMER_APELLIDO_PERSONA, A.SEGUNDO_APELLIDO_PERSONA, A.CARGO_PERSONA, A.CORREO_PERSONA, A.FONO_PERSONA FROM PERSONA AS A INNER JOIN UNIDAD AS B ON A.ID_UNIDAD = B.ID_UNIDAD INNER JOIN CAMPUS AS C ON C.ID_CAMPUS = B.ID_CAMPUS WHERE C.ID_CAMPUS = '$param_campus' and CONCAT(A.PRIMER_NOMBRE_PERSONA, ' ', A.PRIMER_APELLIDO_PERSONA) LIKE '%$param_nombre%' ORDER BY ID_PERSONA ASC";
 
     try{
         $db = new db();
@@ -259,7 +259,7 @@ $app->get('/v1/campus/{id_campus}/persona/{nombre_persona}', function(Request $r
         $persona = array();
 
         for($i=0; $i<$longitud_persona; $i++) {
-            $object = (object) array("id_persona" => $datos_persona[$i]->ID_PERSONA, "id_unidad" => $datos_persona[$i]->ID_UNIDAD, "nombre_unidad" => $datos_persona[$i]->NOMBRE_UNIDAD, "nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA." ".$datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "primer_nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA, "segundo_nombre_persona" => $datos_persona[$i]->SEGUNDO_NOMBRE_PERSONA, "primer_apellido_persona" => $datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "segundo_apellido_persona" => $datos_persona[$i]->SEGUNDO_APELLIDO_PERSONA, "cargo_persona" => $datos_persona[$i]->CARGO_PERSONA, "correo_persona" => $datos_persona[$i]->CORREO_PERSONA, "fono_persona" => $datos_persona[$i]->FONO_PERSONA);
+            $object = (object) array("id_persona" => $datos_persona[$i]->ID_PERSONA, "id_unidad" => $datos_persona[$i]->ID_UNIDAD, "nombre_unidad" => $datos_persona[$i]->NOMBRE_UNIDAD, "latitud_unidad" => $datos_persona[$i]->LATITUD_UNIDAD, "longitud_unidad" => $datos_persona[$i]->LONGITUD_UNIDAD, "nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA." ".$datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "primer_nombre_persona" => $datos_persona[$i]->PRIMER_NOMBRE_PERSONA, "segundo_nombre_persona" => $datos_persona[$i]->SEGUNDO_NOMBRE_PERSONA, "primer_apellido_persona" => $datos_persona[$i]->PRIMER_APELLIDO_PERSONA, "segundo_apellido_persona" => $datos_persona[$i]->SEGUNDO_APELLIDO_PERSONA, "cargo_persona" => $datos_persona[$i]->CARGO_PERSONA, "correo_persona" => $datos_persona[$i]->CORREO_PERSONA, "fono_persona" => $datos_persona[$i]->FONO_PERSONA);
             array_push($persona, $object);
         }
 
