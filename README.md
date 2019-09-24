@@ -30,7 +30,7 @@ Utilización de la API a través del comando cURL.
 curl http://localhost/austral_api/public/index.php/v1/campus
 
 # Listado de todas las unidades pertenecientes a un campus en específico, determinado por el id del campus y ordenados por el id de la unidad.
-curl http://localhost/austral_api/public/index.php/v1/campus/{id campus}
+curl http://localhost/austral_api/public/index.php/v1/campus/{id_campus}
 
 # Obtiene una unidad específica de un campus específico, determinada por el id de la unidad y por el id del campus, tambien se incluye el listado de sus conexiones, así como el listado de todos los nodos pertenecientes al campus específico.
 curl http://localhost/austral_api/public/index.php/v1/campus/{id_campus}/unidad/{id_unidad}
