@@ -41,15 +41,6 @@ $app->get('/v1/campus', function(Request $request, Response $response){
             array_push($campus, $object);
         }
 
-        /*$json_campus = json_encode($campus, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-
-        $json = '{
-            "total_campus": '.$datos_total_campus[0]->TOTAL_CAMPUS.',
-            "campus":'.$json_campus.'
-        }';
-        
-        echo $json;*/
-
         $final_object = (object) array("total_campus" => $datos_total_campus[0]->TOTAL_CAMPUS, "campus" => $campus);
         $json = json_encode($final_object, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
         
