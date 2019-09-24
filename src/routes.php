@@ -75,11 +75,6 @@ $app->get('/v1/campus/{id_campus}', function(Request $request, Response $respons
             array_push($unidades, $object);
         }
 
-        //$json = json_encode($unidades, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-        
-        //echo $json;
-
-        //$final_object = (object) array("total_campus" => $datos_total_campus[0]->TOTAL_CAMPUS, "campus" => $campus);
         $json = json_encode($unidades, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
         
         echo $json."\n";
@@ -124,10 +119,6 @@ $app->get('/v1/campus/{id_campus}/unidad/{id_unidad}', function(Request $request
             $final_object = (object) array("id_unidad" => $datos_unidad[0]->ID_UNIDAD, "id_campus" => $datos_unidad[0]->ID_CAMPUS, "nombre_unidad" => $datos_unidad[0]->NOMBRE_UNIDAD, "descripcion_unidad" => $datos_unidad[0]->DESCRIPCION_UNIDAD, "latitud_unidad" => $datos_unidad[0]->LATITUD_UNIDAD, "longitud_unidad" => $datos_unidad[0]->LONGITUD_UNIDAD, 'conexiones' => conexionUnidadNodo($datos_unidad[$i]->ID_UNIDAD), 'nodos' => $nodos);
         }
 
-        //$json = json_encode($object_final, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-        //echo $json;
-
-        //$final_object = (object) array("total_campus" => $datos_total_campus[0]->TOTAL_CAMPUS, "campus" => $campus);
         $json = json_encode($final_object, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
         
         echo $json."\n";
@@ -235,11 +226,6 @@ $app->get('/v1/campus/{id_campus}/persona/', function(Request $request, Response
             array_push($persona, $object);
         }
 
-        /*$json_persona = json_encode($persona, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-        
-        echo $json_persona;*/
-
-        //$final_object = (object) array("total_campus" => $datos_total_campus[0]->TOTAL_CAMPUS, "campus" => $campus);
         $json = json_encode($persona, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
         
         echo $json."\n";
@@ -274,11 +260,6 @@ $app->get('/v1/campus/{id_campus}/persona/{nombre_persona}', function(Request $r
             array_push($persona, $object);
         }
 
-        /*$json_persona = json_encode($persona, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-        
-        echo $json_persona;*/
-
-        //$final_object = (object) array("total_campus" => $datos_total_campus[0]->TOTAL_CAMPUS, "campus" => $campus);
         $json = json_encode($persona, JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT);
         
         echo $json."\n";
@@ -373,15 +354,6 @@ $app->get('/v1/data.geojson', function(Request $request, Response $response){
             $object = (object) array('type' => 'Feature', 'properties' => '', 'geometry' => $geometry);
             array_push($features, $object);
         }
-
-        /*$json_features = json_encode($features, JSON_UNESCAPED_UNICODE);
-
-        $json_geo = '{
-            "type": "FeatureCollection",
-            "features":'.$json_features.
-        '}';
-        
-        echo $json_geo;*/
 
         $final_object = (object) array("type" => "FeatureCollection", "features" => $features);
         $json = json_encode($final_object, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
