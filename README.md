@@ -1,6 +1,7 @@
 # Austra_api
 
 ### Descripción
+
 API desarrollada para entregar información correspondiente a `Austral_sistema`, en archivos json y geojson.
 
 ### Construcción / Modificación
@@ -17,12 +18,13 @@ php composer.phar install
 sudo chmod 777 logs/
 
 # ejemplo de log
-$this->logger->addInfo('Algo pasó');
+$this->logger->addInfo('Algo sucedió');
 
 - Implementar la base de datos y modificar los parámetros de conexión del archivo austral_api/src/db.php.
 ```
 
 ### Utilización
+
 Utilización de la API a través del comando cURL.
 
 ``` bash
