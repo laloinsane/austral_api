@@ -1,6 +1,7 @@
 # Austra_api
 
 ### Descripción
+
 API desarrollada para entregar información correspondiente a `Austral_sistema`, en archivos json y geojson.
 
 ### Construcción / Modificación
@@ -23,6 +24,7 @@ $this->logger->addInfo('Algo pasó');
 ```
 
 ### Utilización
+
 Utilización de la API a través del comando cURL.
 
 ``` bash
